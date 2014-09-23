@@ -21,7 +21,10 @@ With "Automatic notifications" you can be notified about places around you every
 
 <img src="app/screens/introduction_framed.png" width="40%"/><img src="app/screens/settings_framed.png" width="40%"/>
 
-<img src="wearable/screens/searching_framed.png" width="20%"/> <img src="wearable/screens/venues_framed.png" width="20%"/> <img src="wearable/screens/confirmation_framed.png" width="20%"/> <img src="wearable/screens/checkin_successful_framed.png" width="20%"/>
+<img src="wearable/screens/searching_framed.png" width="20%" hspace="4"/>
+<img src="wearable/screens/venues_framed.png" width="20%" hspace="4"/>
+<img src="wearable/screens/confirmation_framed.png" width="20%" hspace="4"/>
+<img src="wearable/screens/checkin_successful_framed.png" width="20%" hspace="4"/>
 
 ## Setup
 In project home folder create file `gradle.properties` and set Foursquare Client ID and Client Secret (replace stars). You can get them [here](https://foursquare.com/developers/apps).
