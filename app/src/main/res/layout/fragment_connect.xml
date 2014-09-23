@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="16dp">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:gravity="center"
+                  android:layout_above="@+id/btnConnect"
+                  android:layout_alignParentTop="true">
+
+        <ImageView android:id="@+id/image"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/logo"
+                   android:layout_centerHorizontal="true"
+                   android:layout_marginBottom="16dp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wear_for_swarm_needs_connect"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/btnConnect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/connect_to_foursquare"
+            android:textColor="@color/orange_normal"
+            android:textStyle="bold"
+            android:background="@drawable/btn_white_border"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_alignParentBottom="true"
+            />
+
+</RelativeLayout>

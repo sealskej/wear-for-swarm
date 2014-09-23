@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.droidtitan.lintcleaner'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion '20'
+
+    defaultConfig {
+        minSdkVersion 20
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    signingConfigs {
+        release
+    }
+
+    buildTypes {
+        debug {
+            resValue "string", "app_name", "Wear for Swarm Debug"
+            versionNameSuffix " Debug"
+            applicationIdSuffix ".debug"
+        }
+
+        release {
+            resValue "string", "app_name", "Wear for Swarm"
+            signingConfig signingConfigs.release
+        }
+
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+if (project.hasProperty('signingStoreLocation')) {
+    android.signingConfigs.release.storeFile = file(signingStoreLocation)
+}
+if (project.hasProperty('signingStorePassword')) {
+    android.signingConfigs.release.storePassword = signingStorePassword
+}
+if (project.hasProperty('signingKeyPassword')) {
+    android.signingConfigs.release.keyPassword = signingKeyPassword
+}
+if (project.hasProperty('signingKeyAlias')) {
+    android.signingConfigs.release.keyAlias = signingKeyAlias
+}
+
+dependencies {
+    compile "com.google.android.support:wearable:1.0.0"
+    compile project(":shared")
+}

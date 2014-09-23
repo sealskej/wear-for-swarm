@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="@android:Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">@color/orange_normal</item>
+        <item name="android:textViewStyle">@style/Widget.TextView</item>
+    </style>
+
+    <style name="Widget.TextView" parent="android:Widget.TextView">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+</resources>

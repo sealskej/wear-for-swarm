@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+    <android.support.wearable.view.DelayedConfirmationView
+            android:id="@+id/confirmationCancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:circle_radius="118dp"
+            app:circle_padding="5dp"
+            app:circle_border_width="12dp"
+            app:circle_border_color="@color/white"
+            />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            >
+
+        <TextView
+                android:id="@+id/txtName"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                tools:text="Venue"
+                android:fontFamily="sans-serif-condensed-light"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                />
+
+        <io.seal.swarmwear.CountDownView
+                android:id="@+id/countDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="90sp"
+                android:textColor="@color/white"
+                android:text="5"
+                android:layout_marginTop="-10dp"
+                android:layout_marginBottom="-8dp"
+                android:textStyle="bold"
+                android:includeFontPadding="false"
+                tools:ignore="HardcodedText"
+                />
+
+        <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tap_to_cancel"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:textColor="@color/white"
+                android:gravity="center"
+                />
+
+    </LinearLayout>
+
+</RelativeLayout>

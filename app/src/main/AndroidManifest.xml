@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="io.seal.swarmwear"
+          android:installLocation="auto">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <application
+            android:name=".PhoneApp"
+            android:allowBackup="true"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+
+        <activity
+                android:name=".activity.MainActivity"
+                android:exported="true"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoTitleBar"
+                android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".activity.LoginActivity"
+                android:theme="@style/AppTheme.NoTitleBar"/>
+        <activity
+                android:name=".activity.IntroductionActivity"
+                android:theme="@style/AppTheme.OrangeBackground"/>
+        <activity
+                android:name=".activity.ConsoleActivity"
+                android:parentActivityName=".activity.MainActivity"/>
+        <activity
+                android:name="com.foursquare.android.nativeoauth.TokenExchangeActivity"
+                android:theme="@android:style/Theme.Dialog"/>
+
+        <!-- BEGIN: Helper Activities for debugging -->
+        <activity
+                android:name=".activity.ListNearbyVenuesActivity"/>
+        <activity
+                android:name=".activity.SettingsActivity"
+                android:label="@string/title_activity_settings"
+                android:parentActivityName=".activity.MainActivity"/>
+        <!-- END: Helper Activities for debugging -->
+
+        <service
+                android:name=".networking.FoursquareRetrofitSpiceService"/>
+        <service
+                android:name=".service.SearchVenuesService"
+                tools:ignore="ExportedService"/>
+        <service
+                android:name=".service.DoCheckinService"
+                tools:ignore="ExportedService"/>
+        <service
+                android:name=".service.WearListenerService"
+                tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".UserPresentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
+
+    </application>
+
+</manifest>
