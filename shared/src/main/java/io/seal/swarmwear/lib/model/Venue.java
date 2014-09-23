@@ -14,6 +14,7 @@ public class Venue {
 
     private String id;
     private String name;
+    @SuppressWarnings("UnusedDeclaration")
     private Location location;
     @SuppressWarnings("UnusedDeclaration")
     private List<Category> categories;
@@ -66,24 +67,12 @@ public class Venue {
         return this.id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Location getLocation() {
         return this.location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public List<Category> getCategories() {

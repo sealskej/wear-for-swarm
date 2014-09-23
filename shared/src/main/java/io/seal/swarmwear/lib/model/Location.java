@@ -11,10 +11,6 @@ public class Location {
         return this.address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public double getLat() {
         return this.lat;
     }

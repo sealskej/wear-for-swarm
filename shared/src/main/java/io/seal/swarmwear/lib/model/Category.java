@@ -1,10 +1,9 @@
 package io.seal.swarmwear.lib.model;
 
+@SuppressWarnings("UnusedDeclaration")
 public class Category {
 
-    @SuppressWarnings("UnusedDeclaration")
     private Icon icon;
-    @SuppressWarnings("UnusedDeclaration")
     private boolean primary;
 
     public Icon getIcon() {
