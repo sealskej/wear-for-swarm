@@ -1,9 +1,14 @@
 package io.seal.swarmwear.networking.request;
 
+import android.preference.PreferenceManager;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 import io.seal.swarmwear.BuildConfig;
+import io.seal.swarmwear.PhoneApp;
 import io.seal.swarmwear.model.docheckin.DoCheckinResponse;
 import io.seal.swarmwear.networking.Foursquare;
+
+import static io.seal.swarmwear.lib.Properties.PreferenceKeys.FACEBOOK_SHARE;
+import static io.seal.swarmwear.lib.Properties.PreferenceKeys.TWITTER_SHARE;
 
 public class DoCheckinRequest extends RetrofitSpiceRequest<DoCheckinResponse, Foursquare.Api> {
 
@@ -18,7 +23,22 @@ public class DoCheckinRequest extends RetrofitSpiceRequest<DoCheckinResponse, Fo
 
     @Override
     public DoCheckinResponse loadDataFromNetwork() {
+        PhoneApp phoneApp = PhoneApp.getInstance();
+
+        boolean facebookShare = PreferenceManager.getDefaultSharedPreferences(phoneApp).getBoolean(FACEBOOK_SHARE, false);
+        boolean twitterShare = PreferenceManager.getDefaultSharedPreferences(phoneApp).getBoolean(TWITTER_SHARE, false);
+
+        StringBuilder broadcastBuilder = new StringBuilder();
+        broadcastBuilder.append("public");
+
+        if (facebookShare) {
+            broadcastBuilder.append(",facebook");
+        }
+        if (twitterShare) {
+            broadcastBuilder.append(",twitter");
+        }
+
         return getService().doCheckin(BuildConfig.FOURSQUARE_CLIENT_ID, BuildConfig.FOURSQUARE_CLIENT_SECRET,
-                Foursquare.VERSION, mAccessToken, mVenueId);
+                Foursquare.VERSION, mAccessToken, mVenueId, broadcastBuilder.toString());
     }
 }

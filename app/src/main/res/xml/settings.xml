@@ -1,31 +1,51 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-            android:key="summary_notification"
-            android:title="@string/summary_notification_title"
-            android:summary="@string/summary_notification_summary"
-            android:defaultValue="false"/>
+    <PreferenceCategory android:title="Sharing with other networks">
 
-    <CheckBoxPreference
-            android:key="automatic_notifications"
-            android:title="@string/automatic_notifications"
-            android:summary="@string/automatic_notifications_summary"
-            android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="facebook_share"
+                android:title="@string/facebook_share_title"
+                android:summary="@string/facebook_share_summary"
+                android:defaultValue="false"/>
 
-    <ListPreference
-            android:key="passive_location_update_interval"
-            android:title="@string/passive_location_interval"
-            android:entries="@array/passive_location_update_intervals"
-            android:entryValues="@array/passive_location_update_intervals"
-            android:defaultValue="15"
-            android:dependency="automatic_notifications"/>
+        <CheckBoxPreference
+                android:key="twitter_share"
+                android:title="@string/twitter_share_title"
+                android:summary="@string/twitter_share_summary"
+                android:defaultValue="false"/>
 
-    <EditTextPreference
-            android:key="minimum_location_distance"
-            android:title="@string/minimum_displacement"
-            android:numeric="integer"
-            android:defaultValue="35"
-            android:dependency="automatic_notifications"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Notifications">
+
+        <CheckBoxPreference
+                android:key="summary_notification"
+                android:title="@string/summary_notification_title"
+                android:summary="@string/summary_notification_summary"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="automatic_notifications"
+                android:title="@string/automatic_notifications"
+                android:summary="@string/automatic_notifications_summary"
+                android:defaultValue="false"/>
+
+        <ListPreference
+                android:key="passive_location_update_interval"
+                android:title="@string/passive_location_interval"
+                android:entries="@array/passive_location_update_intervals"
+                android:entryValues="@array/passive_location_update_intervals"
+                android:defaultValue="15"
+                android:dependency="automatic_notifications"/>
+
+        <EditTextPreference
+                android:key="minimum_location_distance"
+                android:title="@string/minimum_displacement"
+                android:numeric="integer"
+                android:defaultValue="35"
+                android:dependency="automatic_notifications"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

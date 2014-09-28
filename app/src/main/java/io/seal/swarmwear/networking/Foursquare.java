@@ -56,7 +56,8 @@ public class Foursquare {
                                     @Field("client_secret") String clientSecret,
                                     @Field("v") int version,
                                     @Field("oauth_token") String oAuthToken,
-                                    @Field("venueId") String venueId);
+                                    @Field("venueId") String venueId,
+                                    @Field("broadcast") String broadcast);
 
     }
 }

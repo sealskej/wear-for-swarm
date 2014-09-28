@@ -26,5 +26,9 @@
     <string name="wait_few_seconds">Wait few seconds</string>
     <string name="select_place">Select actual place for check-in</string>
     <string name="wait_5_seconds">Wait 5 seconds to confirm check-in</string>
+    <string name="facebook_share_title">Facebook</string>
+    <string name="facebook_share_summary">Facebook must be enabled in third party connections.</string>
+    <string name="twitter_share_title">Twitter</string>
+    <string name="twitter_share_summary">Twitter must be enabled in third party connections.</string>
 
 </resources>

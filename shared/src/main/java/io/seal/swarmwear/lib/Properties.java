@@ -33,6 +33,8 @@ public class Properties {
         public static final String SUMMARY_NOTIFICATION = "summary_notification";
         public static final String PASSIVE_LOCATION_UPDATE_INTERVAL = "passive_location_update_interval";
         public static final String MINIMUM_LOCATION_DISTANCE = "minimum_location_distance";
+        public static final String FACEBOOK_SHARE = "facebook_share";
+        public static final String TWITTER_SHARE = "twitter_share";
     }
 
     public static class Path {
