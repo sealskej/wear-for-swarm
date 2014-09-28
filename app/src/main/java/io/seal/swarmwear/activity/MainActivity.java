@@ -24,7 +24,9 @@ public class MainActivity extends Activity {
             clazz = LoginActivity.class;
         }
 
-        startActivity(new Intent(this, clazz));
+        Intent intent = new Intent(this, clazz);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
     }
 
 }
