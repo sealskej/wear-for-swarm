@@ -21,7 +21,7 @@
     <string name="automatic_notifications_summary">Application searches for places around you every time another application asks for position.</string>
     <string name="wear_for_swarm_needs_connect">Wear for Swarm needs to connect to Foursquare.</string>
     <string name="connect_to_foursquare">Connect</string>
-    <string name="start_app">Start application Wear for Swarm</string>
+    <string name="start_app">Start application\nWear for Swarm</string>
     <string name="go_to_menu">Go to wearable menu and select Start…</string>
     <string name="wait_few_seconds">Wait few seconds</string>
     <string name="select_place">Select actual place for check-in</string>
