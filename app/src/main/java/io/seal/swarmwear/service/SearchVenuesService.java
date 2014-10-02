@@ -191,6 +191,7 @@ public class SearchVenuesService extends BaseSpiceManagerService implements
     public void onLocationChanged(Location location) {
         long nowMillis = System.currentTimeMillis();
 
+        // TODO add accuracy check for active location request, if accuracy isn't sufficient, wait for better one for few seconds
         trackAndLog("LocationChanged from: " + location.getProvider());
 
         if (mLastLocation != null) {
