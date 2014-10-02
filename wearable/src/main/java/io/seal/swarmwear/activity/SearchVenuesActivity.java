@@ -18,6 +18,7 @@ import io.seal.swarmwear.lib.Properties;
 import io.seal.swarmwear.lib.model.Venue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchVenuesActivity extends BaseTeleportActivity implements WearableListView.ClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -34,28 +35,23 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
 
         setContentView(R.layout.activity_search_venues);
         getWindow().setBackgroundDrawableResource(R.color.yellow);
-
-        getTeleportClient().setOnSyncDataItemTask(new OnVenuesSyncDataItemTask());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart");
+
         GoogleApiClient googleApiClient = getTeleportClient().getGoogleApiClient();
         googleApiClient.registerConnectionCallbacks(this);
         googleApiClient.registerConnectionFailedListener(this);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        getTeleportClient().setOnSyncDataItemTaskBuilder(null);
+        getTeleportClient().setOnSyncDataItemTask(new OnVenuesSyncDataItemTask());
         getTeleportClient().sendMessage(Properties.Path.SEARCH_VENUES, null);
     }
 
     @Override
     protected void onStop() {
-        Log.d(TAG, "onStop");
         GoogleApiClient googleApiClient = getTeleportClient().getGoogleApiClient();
         googleApiClient.unregisterConnectionCallbacks(this);
         googleApiClient.unregisterConnectionFailedListener(this);
@@ -99,8 +95,8 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
     }
 
     private void onVenuesReceived(DataMap result) {
-        ArrayList<DataMap> dataMapList = result.getDataMapArrayList("venues");
-        ArrayList<Venue> venuesList = new ArrayList<>(dataMapList.size());
+        List<DataMap> dataMapList = result.getDataMapArrayList("venues");
+        List<Venue> venuesList = new ArrayList<>(dataMapList.size());
 
         for (DataMap dataMap : dataMapList) {
             Venue venue = Venue.extractFromDataMap(dataMap);
@@ -109,10 +105,15 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
 
         getWindow().setBackgroundDrawableResource(R.color.orange_normal);
         WearableListView wearableListView = new WearableListView(this);
-        mAdapter = new VenuesAdapter(venuesList);
-        wearableListView.setAdapter(mAdapter);
-        wearableListView.setClickListener(this);
-        setContentView(wearableListView);
+        if (mAdapter == null) {
+            mAdapter = new VenuesAdapter(venuesList);
+            wearableListView.setAdapter(mAdapter);
+            wearableListView.setClickListener(this);
+            setContentView(wearableListView);
+        } else if (mAdapter.updateVenues(venuesList)) {
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
     private void onImageReceived(DataMap result) {
@@ -120,7 +121,7 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
 
         for (final Venue venue : mAdapter.getVenuesList()) {
 
-            if (!venue.getId().equals(id)) {
+            if (venue.getPrimaryCategoryBitmap() != null || !venue.getId().equals(id)) {
                 continue;
             }
 
