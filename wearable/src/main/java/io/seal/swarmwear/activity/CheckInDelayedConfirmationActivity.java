@@ -23,7 +23,10 @@ public class CheckInDelayedConfirmationActivity extends BaseTeleportActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_confirmation);
 
-        DelayedConfirmationView cancelConfirmationView = (DelayedConfirmationView) findViewById(R.id.confirmationCancel);
+        final DelayedConfirmationView cancelConfirmationView = (DelayedConfirmationView) findViewById(R.id.confirmationCancel);
+        cancelConfirmationView.setProgress(0);
+        showLater(cancelConfirmationView);
+
         TextView nameTextView = (TextView) findViewById(R.id.txtName);
         CountDownView countDownView = (CountDownView) findViewById(R.id.countDown);
 
@@ -40,6 +43,19 @@ public class CheckInDelayedConfirmationActivity extends BaseTeleportActivity
         countDownView.start(CONFIRMATION_TIMEOUT_SECONDS);
     }
 
+    /**
+     * Show DelayedConfirmationView few milliseconds later, because on Moto 360 there  is full progress
+     * shown, although progress 0 was set before
+     */
+    private void showLater(final View view) {
+        view.setVisibility(View.INVISIBLE);
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisibility(View.VISIBLE);
+            }
+        }, 100);
+    }
 
     @Override
     public void onTimerFinished(View view) {

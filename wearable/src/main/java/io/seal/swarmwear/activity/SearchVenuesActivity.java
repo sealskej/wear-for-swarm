@@ -7,6 +7,7 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
@@ -18,12 +19,15 @@ import io.seal.swarmwear.lib.Properties;
 import io.seal.swarmwear.lib.model.Venue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchVenuesActivity extends BaseTeleportActivity implements WearableListView.ClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "SearchVenuesActivity";
 
+    private ViewSwitcher mViewSwitcher;
+    private WearableListView mWearableListView;
     private VenuesAdapter mAdapter;
 
     @Override
@@ -33,29 +37,26 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         // TODO add logged in check
 
         setContentView(R.layout.activity_search_venues);
-        getWindow().setBackgroundDrawableResource(R.color.yellow);
-
-        getTeleportClient().setOnSyncDataItemTask(new OnVenuesSyncDataItemTask());
+        mViewSwitcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
+        mWearableListView = (WearableListView) findViewById(R.id.wearableList);
+        changeBackgroundColor(R.color.yellow);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart");
+
         GoogleApiClient googleApiClient = getTeleportClient().getGoogleApiClient();
         googleApiClient.registerConnectionCallbacks(this);
         googleApiClient.registerConnectionFailedListener(this);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        getTeleportClient().setOnSyncDataItemTaskBuilder(null);
+        getTeleportClient().setOnSyncDataItemTask(new OnVenuesSyncDataItemTask());
         getTeleportClient().sendMessage(Properties.Path.SEARCH_VENUES, null);
     }
 
     @Override
     protected void onStop() {
-        Log.d(TAG, "onStop");
         GoogleApiClient googleApiClient = getTeleportClient().getGoogleApiClient();
         googleApiClient.unregisterConnectionCallbacks(this);
         googleApiClient.unregisterConnectionFailedListener(this);
@@ -99,20 +100,28 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
     }
 
     private void onVenuesReceived(DataMap result) {
-        ArrayList<DataMap> dataMapList = result.getDataMapArrayList("venues");
-        ArrayList<Venue> venuesList = new ArrayList<>(dataMapList.size());
+        List<DataMap> dataMapList = result.getDataMapArrayList("venues");
+        List<Venue> venuesList = new ArrayList<>(dataMapList.size());
 
         for (DataMap dataMap : dataMapList) {
             Venue venue = Venue.extractFromDataMap(dataMap);
             venuesList.add(venue);
         }
 
-        getWindow().setBackgroundDrawableResource(R.color.orange_normal);
-        WearableListView wearableListView = new WearableListView(this);
-        mAdapter = new VenuesAdapter(venuesList);
-        wearableListView.setAdapter(mAdapter);
-        wearableListView.setClickListener(this);
-        setContentView(wearableListView);
+        if (mAdapter == null) {
+            mAdapter = new VenuesAdapter(venuesList);
+            mWearableListView.setAdapter(mAdapter);
+            mWearableListView.setClickListener(this);
+            changeBackgroundColor(R.color.orange_normal);
+            mViewSwitcher.showNext();
+        } else if (mAdapter.updateVenues(venuesList)) {
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    private void changeBackgroundColor(int orange_normal) {
+        getWindow().setBackgroundDrawableResource(orange_normal);
     }
 
     private void onImageReceived(DataMap result) {
@@ -120,7 +129,7 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
 
         for (final Venue venue : mAdapter.getVenuesList()) {
 
-            if (!venue.getId().equals(id)) {
+            if (venue.getPrimaryCategoryBitmap() != null || !venue.getId().equals(id)) {
                 continue;
             }
 

@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import io.seal.swarmwear.lib.model.Venue;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class VenuesAdapter extends WearableListView.Adapter {
 
-
-    private final List<Venue> mVenuesList;
+    private List<Venue> mVenuesList;
 
     public VenuesAdapter(List<Venue> venueList) {
         this.mVenuesList = venueList;
@@ -52,4 +52,35 @@ public class VenuesAdapter extends WearableListView.Adapter {
     public List<Venue> getVenuesList() {
         return mVenuesList;
     }
+
+    public boolean updateVenues(List<Venue> newVenuesList) {
+        if (mVenuesList == null) {
+            mVenuesList = newVenuesList;
+            return true;
+        }
+
+        if (!isSameVenuesList(newVenuesList)) {
+            mVenuesList.clear();
+            mVenuesList.addAll(newVenuesList);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isSameVenuesList(List<Venue> newVenuesList) {
+        if (mVenuesList.size() != newVenuesList.size()) {
+            return false;
+        }
+
+        Iterator<Venue> iterator = newVenuesList.iterator();
+        for (Venue venue : mVenuesList) {
+            if (!venue.getId().equals(iterator.next().getId())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

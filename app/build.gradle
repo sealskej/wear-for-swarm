@@ -9,8 +9,8 @@ android {
         applicationId "io.seal.swarmwear"
         minSdkVersion 18
         targetSdkVersion 20
-        versionCode 17
-        versionName "1.11"
+        versionCode 18
+        versionName "1.12"
     }
 
     compileOptions {
@@ -74,10 +74,10 @@ def gaConstantName = "GOOGLE_ANALYTICS_PROPERTY_ID"
 def foursquareClientIdConstantName = "FOURSQUARE_CLIENT_ID"
 def foursquareClientSecretConstantName = "FOURSQUARE_CLIENT_SECRET"
 
-crittercismId = '"' + (project.hasProperty('crittercismAppId') ? crittercismAppId: "") + '"'
-gaId = '"' + (project.hasProperty('gaPropertyId') ?  gaPropertyId : "") + '"'
-fsClientId = '"' + (project.hasProperty('foursquareClientId') ?  foursquareClientId : "") + '"'
-fsClientSecret = '"' + (project.hasProperty('foursquareClientSecret') ?  foursquareClientSecret : "") + '"'
+project.ext.crittercismId = '"' + (project.hasProperty('crittercismAppId') ? crittercismAppId: "") + '"'
+project.ext.gaId = '"' + (project.hasProperty('gaPropertyId') ?  gaPropertyId : "") + '"'
+project.ext.fsClientId = '"' + (project.hasProperty('foursquareClientId') ?  foursquareClientId : "") + '"'
+project.ext.fsClientSecret = '"' + (project.hasProperty('foursquareClientSecret') ?  foursquareClientSecret : "") + '"'
 
 android.buildTypes.debug.buildConfigField type, crittercismConstantName,  crittercismId
 android.buildTypes.debug.buildConfigField type, gaConstantName, gaId
