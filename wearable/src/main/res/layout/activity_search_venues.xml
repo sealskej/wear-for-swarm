@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
+<android.support.wearable.view.BoxInsetLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
         >
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/now_searching"
-            android:layout_marginTop="8dp"
-            android:drawableTop="@drawable/ic_now_searching"
-            android:drawablePadding="8dp"
-            />
+    <ViewSwitcher
+            android:id="@+id/viewSwitcher"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_box="left|bottom|right"
+            >
 
-</LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/now_searching"
+                android:layout_marginTop="8dp"
+                android:drawableTop="@drawable/ic_now_searching"
+                android:drawablePadding="8dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                />
+
+        <FrameLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                >
+
+            <android.support.wearable.view.WearableListView
+                    android:id="@+id/wearableList"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    >
+            </android.support.wearable.view.WearableListView>
+        </FrameLayout>
+
+    </ViewSwitcher>
+
+</android.support.wearable.view.BoxInsetLayout>
