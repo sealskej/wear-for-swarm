@@ -4,10 +4,10 @@ import android.content.Context;
 import android.support.wearable.view.CircledImageView;
 import android.support.wearable.view.WearableListView;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class VenueItemView extends FrameLayout implements WearableListView.Item {
+public class VenueItemView extends LinearLayout implements WearableListView.Item {
 
     private final CircledImageView imgView;
     private final TextView txtView;

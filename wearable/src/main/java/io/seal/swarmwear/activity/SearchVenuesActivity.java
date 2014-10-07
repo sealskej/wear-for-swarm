@@ -7,6 +7,7 @@ import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
@@ -25,6 +26,8 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
 
     private static final String TAG = "SearchVenuesActivity";
 
+    private ViewSwitcher mViewSwitcher;
+    private WearableListView mWearableListView;
     private VenuesAdapter mAdapter;
 
     @Override
@@ -34,7 +37,9 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         // TODO add logged in check
 
         setContentView(R.layout.activity_search_venues);
-        getWindow().setBackgroundDrawableResource(R.color.yellow);
+        mViewSwitcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
+        mWearableListView = (WearableListView) findViewById(R.id.wearableList);
+        changeBackgroundColor(R.color.yellow);
     }
 
     @Override
@@ -103,17 +108,20 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
             venuesList.add(venue);
         }
 
-        getWindow().setBackgroundDrawableResource(R.color.orange_normal);
-        WearableListView wearableListView = new WearableListView(this);
         if (mAdapter == null) {
             mAdapter = new VenuesAdapter(venuesList);
-            wearableListView.setAdapter(mAdapter);
-            wearableListView.setClickListener(this);
-            setContentView(wearableListView);
+            mWearableListView.setAdapter(mAdapter);
+            mWearableListView.setClickListener(this);
+            changeBackgroundColor(R.color.orange_normal);
+            mViewSwitcher.showNext();
         } else if (mAdapter.updateVenues(venuesList)) {
             mAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    private void changeBackgroundColor(int orange_normal) {
+        getWindow().setBackgroundDrawableResource(orange_normal);
     }
 
     private void onImageReceived(DataMap result) {

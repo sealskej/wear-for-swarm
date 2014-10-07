@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:app="http://schemas.android.com/apk/res-auto">
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       android:gravity="center_vertical"
+        >
 
     <android.support.wearable.view.CircledImageView
             android:id="@+id/img"
             android:layout_height="56dp"
             android:layout_width="56dp"
-            android:alpha="0.5"
-            android:layout_marginLeft="16dp"
             app:circle_border_color="#FFFFFFFF"
-            app:circle_border_width="4dp"/>
+            app:circle_border_width="4dp"
+            android:layout_margin="8dp"
+            />
 
     <TextView
             android:id="@+id/txtName"
-            android:alpha="0.5"
             android:fontFamily="sans-serif-condensed-light"
-            android:gravity="center_vertical"
-            android:layout_height="52dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="16dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_marginEnd="8dp"
             android:textSize="18sp"
             android:textColor="@color/white"
+            android:layout_gravity="center_vertical"
             />
 
 </merge>
