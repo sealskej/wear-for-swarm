@@ -2,6 +2,8 @@ package io.seal.swarmwear.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
@@ -11,13 +13,16 @@ import android.widget.ViewSwitcher;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.Wearable;
 import com.mariux.teleport.lib.TeleportClient;
 import io.seal.swarmwear.R;
 import io.seal.swarmwear.VenuesAdapter;
 import io.seal.swarmwear.lib.Properties;
 import io.seal.swarmwear.lib.model.Venue;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,7 +139,7 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
             }
 
             Asset asset = result.getAsset("asset");
-            new TeleportClient.ImageFromAssetTask() {
+            new ImageFromAssetTask() {
                 @Override
                 protected void onPostExecute(Bitmap bitmap) {
                     venue.setPrimaryCategoryBitmap(bitmap);
@@ -142,6 +147,39 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
                 }
             }.execute(asset, getTeleportClient().getGoogleApiClient());
         }
+    }
+
+     private abstract class ImageFromAssetTask extends AsyncTask<Object, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(Object... params) {
+
+            Asset asset = (Asset) params[0];
+            if (asset == null) {
+                return null;
+            }
+
+            GoogleApiClient googleApiClient = (GoogleApiClient) params[1];
+            if (googleApiClient == null || !googleApiClient.isConnected()) {
+                return null;
+            }
+
+            DataApi.GetFdForAssetResult pendingResult = Wearable.DataApi.getFdForAsset(googleApiClient, asset).await();
+            if (pendingResult == null || pendingResult.getFd() == null) {
+                return null;
+            }
+
+            InputStream assetInputStream = pendingResult.getInputStream();
+            if (assetInputStream == null) {
+                return null;
+            }
+
+            return BitmapFactory.decodeStream(assetInputStream);
+        }
+
+        @Override
+        protected abstract void onPostExecute(Bitmap bitmap);
+
     }
 
     @Override
