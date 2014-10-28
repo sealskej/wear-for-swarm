@@ -38,8 +38,12 @@ import io.seal.swarmwear.activity.IntroductionActivity;
 import io.seal.swarmwear.event.VenuesAvailableEvent;
 import io.seal.swarmwear.lib.Properties;
 import io.seal.swarmwear.lib.model.Venue;
-import io.seal.swarmwear.model.search.SearchResponse;
-import io.seal.swarmwear.networking.request.SearchRequest;
+import io.seal.swarmwear.networking.response.ProfileSearchResponse;
+import io.seal.swarmwear.networking.response.ProfileSearchVenuesResponse;
+import io.seal.swarmwear.networking.response.ProfileResponse;
+import io.seal.swarmwear.networking.response.SearchResponse;
+import io.seal.swarmwear.networking.Foursquare;
+import io.seal.swarmwear.networking.request.ProfileAndVenuesRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,7 +58,7 @@ import static io.seal.swarmwear.lib.Properties.PreferenceKeys.PASSIVE_LOCATION_U
 public class SearchVenuesService extends BaseSpiceManagerService implements
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener,
-        LocationListener, RequestListener<SearchResponse> {
+        LocationListener, RequestListener<ProfileSearchVenuesResponse> {
 
     private static final String TAG = "SearchVenuesService";
 
@@ -207,7 +211,7 @@ public class SearchVenuesService extends BaseSpiceManagerService implements
 
         mSharedPreferences.edit().putLong(Properties.SharePreferencesKeys.LOCATION_CHANGED_TIME, nowMillis).commit();
 
-        SearchRequest request = new SearchRequest(location.getLatitude(), location.getLongitude());
+        ProfileAndVenuesRequest request = new ProfileAndVenuesRequest(Foursquare.getAccessToken(this), location.getLatitude(), location.getLongitude());
         request.setRetryPolicy(new DefaultRetryPolicy());
 
         getSpiceManager().execute(request, this);
@@ -220,18 +224,33 @@ public class SearchVenuesService extends BaseSpiceManagerService implements
     }
 
     @Override
-    public void onRequestSuccess(SearchResponse searchResponse) {
+    public void onRequestSuccess(ProfileSearchVenuesResponse profileSearchVenuesResponse) {
         onRequest(Properties.SUCCESS.NAME, Properties.SUCCESS.VALUE);
+
+        ProfileSearchResponse profileSearchResponse = profileSearchVenuesResponse.getResponse().getResponses();
+
+        SearchResponse searchResponse = profileSearchResponse.getSearchResponse();
 
         ArrayList<Venue> venues = searchResponse.getResponse().getVenues();
         if (venues != null) {
             BusProvider.getInstance().post(new VenuesAvailableEvent(venues));
         }
 
+        ProfileResponse profileResponse = profileSearchResponse.getProfileResponse();
+        ProfileResponse.Response.User.Contact user = profileResponse.getResponse().getUser().getContact();
+
+        int socialNetworks = 0;
+        if (user.hasFacebook()) {
+            socialNetworks |= Properties.SOCIAL_NETWORK_CODE.FACEBOOK;
+        }
+        if (user.hasTwitter()) {
+            socialNetworks |= Properties.SOCIAL_NETWORK_CODE.TWITTER;
+        }
+
         if (mSendToWearable) {
-            sendToWearable(searchResponse);
+            sendToWearable(venues, socialNetworks);
         } else {
-            updateNotifications(searchResponse);
+            updateNotifications(venues);
         }
     }
 
@@ -245,15 +264,13 @@ public class SearchVenuesService extends BaseSpiceManagerService implements
         EventManager.trackAndLogEvent(TAG, "search venues request", name, value);
     }
 
-    private void updateNotifications(SearchResponse searchResponse) {
+    private void updateNotifications(List<Venue> venues) {
         getNotificationManager().cancelAll();
         trackAndLog("postNotifications");
-        postNotifications(searchResponse);
+        postNotifications(venues);
     }
 
-    private void postNotifications(SearchResponse searchResponse) {
-        List<Venue> venues = searchResponse.getResponse().getVenues();
-
+    private void postNotifications(List<Venue> venues) {
         if (venues == null || venues.isEmpty()) {
             trackAndLog("venues.isEmpty()");
             return;
@@ -372,18 +389,18 @@ public class SearchVenuesService extends BaseSpiceManagerService implements
         EventManager.trackAndLogEvent(TAG, action);
     }
 
-    private void sendToWearable(SearchResponse searchResponse) {
-        ArrayList<Venue> venuesList = searchResponse.getResponse().getVenues();
-
+    private void sendToWearable(List<Venue> venues, int socialNetworks) {
         final ArrayList<DataMap> dataVenues = new ArrayList<>();
-        for (Venue venue : venuesList) {
+        for (Venue venue : venues) {
             dataVenues.add(venue.getDataMap());
         }
 
         PutDataMapRequest dataMapRequest = PutDataMapRequest.createWithAutoAppendedId(Properties.Path.VENUES);
-        dataMapRequest.getDataMap().putDataMapArrayList("venues", dataVenues);
+        DataMap dataMap = dataMapRequest.getDataMap();
+        dataMap.putInt(Properties.SOCIAL_NETWORKS, socialNetworks);
+        dataMap.putDataMapArrayList("venues", dataVenues);
         mTeleportClient.syncDataItem(dataMapRequest);
-        handleImages(venuesList);
+        handleImages(venues);
 
         // if images aren't downloaded in 5 secs, allow to destroy this service
         // TODO handle this based on (un)finished image requests

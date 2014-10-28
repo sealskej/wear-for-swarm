@@ -42,19 +42,38 @@
                 android:textStyle="bold"
                 />
 
-        <io.seal.swarmwear.CountDownView
-                android:id="@+id/countDown"
+        <ViewSwitcher
+                android:id="@+id/viewSwitcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="90sp"
-                android:textColor="@color/white"
-                android:text="5"
-                android:layout_marginTop="-10dp"
-                android:layout_marginBottom="-8dp"
-                android:textStyle="bold"
-                android:includeFontPadding="false"
-                tools:ignore="HardcodedText"
-                />
+                >
+
+            <io.seal.swarmwear.CountDownView
+                    android:id="@+id/countDown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="90sp"
+                    android:textColor="@color/white"
+                    android:text="5"
+                    android:textStyle="bold"
+                    android:includeFontPadding="false"
+                    tools:ignore="HardcodedText"
+                    android:layout_gravity="center"
+                    />
+
+            <CheckBox
+                    android:id="@+id/checkBoxSocial"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/share_on_social_networks"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_marginBottom="30dp"
+                    />
+
+        </ViewSwitcher>
 
         <TextView
                 android:layout_width="130dp"

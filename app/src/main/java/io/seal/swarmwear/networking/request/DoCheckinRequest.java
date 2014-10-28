@@ -1,40 +1,35 @@
 package io.seal.swarmwear.networking.request;
 
-import android.preference.PreferenceManager;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 import io.seal.swarmwear.BuildConfig;
-import io.seal.swarmwear.PhoneApp;
-import io.seal.swarmwear.model.docheckin.DoCheckinResponse;
 import io.seal.swarmwear.networking.Foursquare;
+import io.seal.swarmwear.networking.response.DoCheckinResponse;
 
-import static io.seal.swarmwear.lib.Properties.PreferenceKeys.FACEBOOK_SHARE;
-import static io.seal.swarmwear.lib.Properties.PreferenceKeys.TWITTER_SHARE;
+import static io.seal.swarmwear.lib.Properties.SOCIAL_NETWORK_CODE;
 
 public class DoCheckinRequest extends RetrofitSpiceRequest<DoCheckinResponse, Foursquare.Api> {
 
     private final String mAccessToken;
     private final String mVenueId;
+    private final int mSocialNetworks;
 
-    public DoCheckinRequest(String accessToken, String venueId) {
+    public DoCheckinRequest(String accessToken, String venueId, int socialNetworks) {
         super(DoCheckinResponse.class, Foursquare.Api.class);
         mAccessToken = accessToken;
         mVenueId = venueId;
+        mSocialNetworks = socialNetworks;
     }
 
     @Override
     public DoCheckinResponse loadDataFromNetwork() {
-        PhoneApp phoneApp = PhoneApp.getInstance();
-
-        boolean facebookShare = PreferenceManager.getDefaultSharedPreferences(phoneApp).getBoolean(FACEBOOK_SHARE, false);
-        boolean twitterShare = PreferenceManager.getDefaultSharedPreferences(phoneApp).getBoolean(TWITTER_SHARE, false);
 
         StringBuilder broadcastBuilder = new StringBuilder();
         broadcastBuilder.append("public");
 
-        if (facebookShare) {
+        if ((mSocialNetworks & SOCIAL_NETWORK_CODE.FACEBOOK) == SOCIAL_NETWORK_CODE.FACEBOOK) {
             broadcastBuilder.append(",facebook");
         }
-        if (twitterShare) {
+        if ((mSocialNetworks & SOCIAL_NETWORK_CODE.TWITTER) == SOCIAL_NETWORK_CODE.TWITTER) {
             broadcastBuilder.append(",twitter");
         }
 

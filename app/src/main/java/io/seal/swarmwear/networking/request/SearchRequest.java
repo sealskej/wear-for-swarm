@@ -2,7 +2,7 @@ package io.seal.swarmwear.networking.request;
 
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 import io.seal.swarmwear.BuildConfig;
-import io.seal.swarmwear.model.search.SearchResponse;
+import io.seal.swarmwear.networking.response.SearchResponse;
 import io.seal.swarmwear.networking.Foursquare;
 
 public class SearchRequest extends RetrofitSpiceRequest<SearchResponse, Foursquare.Api> {

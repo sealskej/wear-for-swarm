@@ -34,6 +34,7 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
     private ViewSwitcher mViewSwitcher;
     private WearableListView mWearableListView;
     private VenuesAdapter mAdapter;
+    private int mSocialNetworks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,9 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
 
     @Override
     protected void onStop() {
+        // TODO check if this works
+//        getTeleportClient().setOnSyncDataItemTaskBuilder(null);
+//        getTeleportClient().setOnSyncDataItemTask(null);
         GoogleApiClient googleApiClient = getTeleportClient().getGoogleApiClient();
         googleApiClient.unregisterConnectionCallbacks(this);
         googleApiClient.unregisterConnectionFailedListener(this);
@@ -73,8 +77,10 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         protected void onPostExecute(DataMap result) {
             if (result.containsKey("venues")) {
 
-                Log.d(TAG, "venues received");
                 onVenuesReceived(result);
+
+                mSocialNetworks = result.getInt(Properties.SOCIAL_NETWORKS);
+
                 getTeleportClient().setOnSyncDataItemTaskBuilder(new TeleportClient.OnSyncDataItemTask.Builder() {
                     @Override
                     public TeleportClient.OnSyncDataItemTask build() {
@@ -92,7 +98,6 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         @Override
         protected void onPostExecute(DataMap result) {
             if (result.containsKey("asset")) {
-                Log.d(TAG, "image received");
                 onImageReceived(result);
             } else {
                 logUnknownResult();
@@ -190,6 +195,7 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         Intent intent = new Intent(this, CheckInDelayedConfirmationActivity.class);
         intent.putExtra(Venue.ID, id);
         intent.putExtra(Venue.NAME, name);
+        intent.putExtra(Properties.SOCIAL_NETWORKS, mSocialNetworks);
 
         startActivity(intent);
     }

@@ -2,8 +2,13 @@ package io.seal.swarmwear.activity;
 
 import android.os.Bundle;
 import android.support.wearable.view.DelayedConfirmationView;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.PutDataMapRequest;
 import io.seal.swarmwear.CountDownView;
 import io.seal.swarmwear.R;
 import io.seal.swarmwear.lib.Properties;
@@ -14,9 +19,12 @@ import java.util.concurrent.TimeUnit;
 public class CheckInDelayedConfirmationActivity extends BaseTeleportActivity
         implements DelayedConfirmationView.DelayedConfirmationListener {
 
+    private static final String TAG = "CheckInDelayedConfirmationActivity";
+
     public static final int CONFIRMATION_TIMEOUT_SECONDS = 5;
 
     private String mId;
+    private CheckBox mSocialCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,8 @@ public class CheckInDelayedConfirmationActivity extends BaseTeleportActivity
 
         TextView nameTextView = (TextView) findViewById(R.id.txtName);
         CountDownView countDownView = (CountDownView) findViewById(R.id.countDown);
+        ViewSwitcher viewSwitcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
+        mSocialCheckBox = (CheckBox) findViewById(R.id.checkBoxSocial);
 
         mId = getIntent().getStringExtra(Venue.ID);
         String name = getIntent().getStringExtra(Venue.NAME);
@@ -41,6 +51,12 @@ public class CheckInDelayedConfirmationActivity extends BaseTeleportActivity
         cancelConfirmationView.setTag(R.id.key_cancel, Boolean.FALSE);
 
         countDownView.start(CONFIRMATION_TIMEOUT_SECONDS);
+
+        int socialNetworks = getIntent().getIntExtra(Properties.SOCIAL_NETWORKS, 0);
+
+        if (socialNetworks > 0) {
+            viewSwitcher.showNext();
+        }
     }
 
     /**
@@ -60,7 +76,19 @@ public class CheckInDelayedConfirmationActivity extends BaseTeleportActivity
     @Override
     public void onTimerFinished(View view) {
         if (view.getTag(R.id.key_cancel) == Boolean.FALSE) {
-            getTeleportClient().sendMessage(Properties.Path.CHECK_IN + '/' + mId, null);
+
+            PutDataMapRequest dataMapRequest = PutDataMapRequest.createWithAutoAppendedId(Properties.Path.VENUES);
+            DataMap dataMap = dataMapRequest.getDataMap();
+            dataMap.putBoolean(Properties.CHECKIN, true);
+            dataMap.putString(Venue.ID, mId);
+
+            if (mSocialCheckBox.isChecked()) {
+                int socialNetworks = getIntent().getIntExtra(Properties.SOCIAL_NETWORKS, 0);
+                dataMap.putInt(Properties.SOCIAL_NETWORKS, socialNetworks);
+            }
+
+            getTeleportClient().syncDataItem(dataMapRequest);
+
             finishAffinity();
         } else {
             finish();

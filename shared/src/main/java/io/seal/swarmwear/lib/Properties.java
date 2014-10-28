@@ -2,6 +2,8 @@ package io.seal.swarmwear.lib;
 
 public class Properties {
 
+    public static final String CHECKIN = "checkin";
+
     public static class SUCCESS {
         public static String NAME = "success";
         public static long VALUE = 0;
@@ -33,15 +35,19 @@ public class Properties {
         public static final String SUMMARY_NOTIFICATION = "summary_notification";
         public static final String PASSIVE_LOCATION_UPDATE_INTERVAL = "passive_location_update_interval";
         public static final String MINIMUM_LOCATION_DISTANCE = "minimum_location_distance";
-        public static final String FACEBOOK_SHARE = "facebook_share";
-        public static final String TWITTER_SHARE = "twitter_share";
     }
 
     public static class Path {
         public static final String VENUES = "/venues";
         public static final String SEARCH_VENUES = VENUES + "/search";
-        public static final String CHECK_IN = VENUES + "/checkin";
         public static final String IMAGES = VENUES + "/images";
+    }
+
+    public static final String SOCIAL_NETWORKS = "social_networks";
+
+    public static class SOCIAL_NETWORK_CODE {
+        public static final int FACEBOOK = 2;
+        public static final int TWITTER = 4;
     }
 
 }

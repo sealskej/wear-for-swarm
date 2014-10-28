@@ -13,7 +13,7 @@ import io.seal.swarmwear.R;
 import io.seal.swarmwear.Utils;
 import io.seal.swarmwear.activity.IntroductionActivity;
 import io.seal.swarmwear.lib.Properties;
-import io.seal.swarmwear.model.docheckin.DoCheckinResponse;
+import io.seal.swarmwear.networking.response.DoCheckinResponse;
 import io.seal.swarmwear.networking.Foursquare;
 import io.seal.swarmwear.networking.request.DoCheckinRequest;
 
@@ -26,24 +26,34 @@ public class DoCheckinService extends BaseSpiceRequestService<DoCheckinResponse>
     private static final String TAG = "DoCheckinService";
 
     public static void start(Context context, String venueId) {
-        Intent checkinIntent = DoCheckinService.getServiceIntent(context, venueId);
+        start(context, venueId, 0);
+    }
+
+    public static void start(Context context, String venueId, int socialNetworks) {
+        Intent checkinIntent = DoCheckinService.getServiceIntent(context, venueId, socialNetworks);
         context.startService(checkinIntent);
     }
 
     protected static Intent getServiceIntent(Context context, String venueId) {
+        return getServiceIntent(context, venueId, 0);
+    }
+
+    protected static Intent getServiceIntent(Context context, String venueId, int socialNetworks) {
         Intent checkinIntent = new Intent(context.getApplicationContext(), DoCheckinService.class);
         checkinIntent.putExtra(Properties.Keys.VENUE_ID, venueId);
+        checkinIntent.putExtra(Properties.SOCIAL_NETWORKS, socialNetworks);
         return checkinIntent;
     }
 
     protected SpiceRequest<DoCheckinResponse> onCreateRequest(Intent intent) {
         String venueId = intent.getStringExtra(VENUE_ID);
+        int socialNetworks = intent.getIntExtra(Properties.SOCIAL_NETWORKS, 0);
 
         if (TextUtils.isEmpty(venueId)) {
             throw new IllegalArgumentException(String.format("intent [%s] must not be null!", VENUE_ID));
         }
 
-        return new DoCheckinRequest(Foursquare.getAccessToken(this), venueId);
+        return new DoCheckinRequest(Foursquare.getAccessToken(this), venueId, socialNetworks);
     }
 
     @Override

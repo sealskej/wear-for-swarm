@@ -6,8 +6,9 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import io.seal.swarmwear.BuildConfig;
 import io.seal.swarmwear.lib.Properties;
-import io.seal.swarmwear.model.docheckin.DoCheckinResponse;
-import io.seal.swarmwear.model.search.SearchResponse;
+import io.seal.swarmwear.networking.response.ProfileSearchVenuesResponse;
+import io.seal.swarmwear.networking.response.DoCheckinResponse;
+import io.seal.swarmwear.networking.response.SearchResponse;
 import org.jetbrains.annotations.NotNull;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -22,7 +23,7 @@ public class Foursquare {
             + "&redirect_uri=null", BuildConfig.FOURSQUARE_CLIENT_ID);
     public static String AUTH_URL = String.format("https://" + UNIVERSAL_HOST);
     public static int VERSION = 20140610;
-    public static String INTENT_CHECKIN = "checkin";
+    public static String INTENT_CHECKIN = Properties.CHECKIN;
 
     public static void saveAccessToken(@NotNull Context context, @NotNull String accessToken) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -49,6 +50,13 @@ public class Foursquare {
                               @Query("ll") String location,
                               @Query("intent") String intent,
                               @Query("limit") int limit);
+
+        @GET("/v2/multi?requests=/users/self,/venues/search")
+        ProfileSearchVenuesResponse profileAndVenues(@Query("oauth_token") String oAuthToken,
+                                                     @Query("v") int version,
+                                                     @Query("ll") String location,
+                                                     @Query("intent") String intent,
+                                                     @Query("limit") int limit);
 
         @FormUrlEncoded
         @POST("/v2/checkins/add")

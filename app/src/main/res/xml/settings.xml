@@ -1,22 +1,6 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Sharing with other networks">
-
-        <CheckBoxPreference
-                android:key="facebook_share"
-                android:title="@string/facebook_share_title"
-                android:summary="@string/facebook_share_summary"
-                android:defaultValue="false"/>
-
-        <CheckBoxPreference
-                android:key="twitter_share"
-                android:title="@string/twitter_share_title"
-                android:summary="@string/twitter_share_summary"
-                android:defaultValue="false"/>
-
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="Notifications">
 
         <CheckBoxPreference
