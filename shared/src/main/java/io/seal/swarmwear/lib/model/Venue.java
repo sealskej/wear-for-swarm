@@ -20,9 +20,6 @@ public class Venue {
     private List<Category> categories;
     private Bitmap primaryCategoryBitmap;
 
-    public Venue() {
-    }
-
     public Venue(String id, String name) {
         this.id = id;
         this.name = name;

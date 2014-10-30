@@ -28,7 +28,7 @@ public class Foursquare {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(Properties.SharePreferencesKeys.FOURSQUARE_ACCESS_TOKEN, accessToken);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getAccessToken(@NotNull Context context) {

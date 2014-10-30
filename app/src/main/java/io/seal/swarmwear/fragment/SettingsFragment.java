@@ -1,6 +1,5 @@
 package io.seal.swarmwear.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -53,8 +52,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
         String key = preference.getKey();
-
-        Context applicationContext = getActivity().getApplicationContext();
 
         Object objectValue;
         if (newValue instanceof Boolean) {
