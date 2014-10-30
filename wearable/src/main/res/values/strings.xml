@@ -4,5 +4,6 @@
     <string name="now_searching">now searching…</string>
     <string name="sorry_error">Sorry, error occurred</string>
     <string name="tap_to_cancel">TAP TO CANCEL CHECK-IN</string>
+    <string name="not_logged_in">Sorry, you\'re not signed in. Please go to Wear for Swarm on your phone and login.</string>
 
 </resources>
