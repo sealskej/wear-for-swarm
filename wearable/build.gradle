@@ -54,5 +54,6 @@ if (project.hasProperty('signingKeyAlias')) {
 
 dependencies {
     compile "com.google.android.support:wearable:1.0.0"
+    compile 'fr.nicolaspomepuy.androidwearcrashreport:crashreport-wear:0.4@aar'
     compile project(":shared")
 }

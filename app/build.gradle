@@ -105,6 +105,7 @@ dependencies {
     compile 'com.github.johnkil.android-progressfragment:progressfragment-native:1.4.0'
     compile 'commons-io:commons-io:2.4'
     compile 'com.foursquare:foursquare-android-nativeoauth-lib:1.0.0'
+    compile 'fr.nicolaspomepuy.androidwearcrashreport:crashreport-mobile:0.4@aar'
     compile project(":shared")
     wearApp project(':wearable')
 }
