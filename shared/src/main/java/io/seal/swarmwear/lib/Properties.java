@@ -40,6 +40,7 @@ public class Properties {
     public static class Path {
         public static final String VENUES = "/venues";
         public static final String SEARCH_VENUES = VENUES + "/search";
+        public static final String NO_LOGIN = VENUES + "/user/noLogin";
         public static final String CHECK_IN = VENUES + "/checkin";
         public static final String IMAGES = VENUES + "/images";
     }

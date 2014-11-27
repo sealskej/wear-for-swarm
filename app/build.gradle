@@ -9,8 +9,8 @@ android {
         applicationId "io.seal.swarmwear"
         minSdkVersion 18
         targetSdkVersion 20
-        versionCode 19
-        versionName "1.13"
+        versionCode 20
+        versionName "1.14"
     }
 
     compileOptions {
@@ -33,10 +33,12 @@ android {
             resValue "string", "app_name", "Wear for Swarm"
             signingConfig signingConfigs.release
             applicationVariants.all { variant ->
-                def file = variant.outputFile
+                variant.outputs.each { output ->
+                    def file = output.outputFile
 
-                def fileName = file.name.replace(".apk", "-" + defaultConfig.versionName + "-" + defaultConfig.versionCode + ".apk")
-                variant.outputFile = new File(file.parent, fileName)
+                    def fileName = file.name.replace(".apk", "-" + defaultConfig.versionName + "-" + defaultConfig.versionCode + ".apk")
+                    output.outputFile = new File(file.parent, fileName)
+                }
             }
         }
     }
@@ -89,6 +91,10 @@ android.buildTypes.release.buildConfigField type, gaConstantName, gaId
 android.buildTypes.release.buildConfigField type, foursquareClientIdConstantName, fsClientId
 android.buildTypes.release.buildConfigField type, foursquareClientSecretConstantName, fsClientSecret
 
+configurations {
+    all*.exclude group: 'org.apache.commons'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:support-v13:20.0.0"
@@ -99,6 +105,7 @@ dependencies {
     compile 'com.github.johnkil.android-progressfragment:progressfragment-native:1.4.0'
     compile 'commons-io:commons-io:2.4'
     compile 'com.foursquare:foursquare-android-nativeoauth-lib:1.0.0'
+    compile 'fr.nicolaspomepuy.androidwearcrashreport:crashreport-mobile:0.4@aar'
     compile project(":shared")
     wearApp project(':wearable')
 }

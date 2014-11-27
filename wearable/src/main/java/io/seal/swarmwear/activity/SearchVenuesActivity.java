@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "SearchVenuesActivity";
+    private static final int NO_LOGIN_MESSAGE_TIMEOUT = 4000;
 
     private ViewSwitcher mViewSwitcher;
     private WearableListView mWearableListView;
@@ -55,20 +57,25 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         googleApiClient.registerConnectionCallbacks(this);
         googleApiClient.registerConnectionFailedListener(this);
 
-        getTeleportClient().setOnSyncDataItemTaskBuilder(null);
-        getTeleportClient().setOnSyncDataItemTask(new OnVenuesSyncDataItemTask());
+        getTeleportClient().setOnGetMessageTask(new OnGetMessageTask());
+        getTeleportClient().setOnSyncDataItemTask(new OnSyncDataItemTask());
         getTeleportClient().sendMessage(Properties.Path.SEARCH_VENUES, null);
     }
 
     @Override
     protected void onStop() {
+
+        getTeleportClient().setOnGetMessageTask(null);
+        getTeleportClient().setOnSyncDataItemTask(null);
+        getTeleportClient().setOnSyncDataItemTaskBuilder(null);
+
         GoogleApiClient googleApiClient = getTeleportClient().getGoogleApiClient();
         googleApiClient.unregisterConnectionCallbacks(this);
         googleApiClient.unregisterConnectionFailedListener(this);
         super.onStop();
     }
 
-    private class OnVenuesSyncDataItemTask extends TeleportClient.OnSyncDataItemTask {
+    private class OnSyncDataItemTask extends TeleportClient.OnSyncDataItemTask {
         @Override
         protected void onPostExecute(DataMap result) {
             if (result.containsKey("venues")) {
@@ -149,7 +156,7 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         }
     }
 
-     private abstract class ImageFromAssetTask extends AsyncTask<Object, Void, Bitmap> {
+    private abstract class ImageFromAssetTask extends AsyncTask<Object, Void, Bitmap> {
 
         @Override
         protected Bitmap doInBackground(Object... params) {
@@ -192,6 +199,24 @@ public class SearchVenuesActivity extends BaseTeleportActivity implements Wearab
         intent.putExtra(Venue.NAME, name);
 
         startActivity(intent);
+    }
+
+    private class OnGetMessageTask extends TeleportClient.OnGetMessageTask {
+
+        @Override
+        protected void onPostExecute(String path) {
+
+            if (path.equals(Properties.Path.NO_LOGIN)) {
+                Toast.makeText(SearchVenuesActivity.this, R.string.not_logged_in, Toast.LENGTH_LONG).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, NO_LOGIN_MESSAGE_TIMEOUT);
+            }
+        }
+
     }
 
     @Override

@@ -4,9 +4,9 @@ import io.seal.swarmwear.lib.model.Venue;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("UnusedDeclaration")
 public class Response {
 
-    @SuppressWarnings("unused")
     private ArrayList<Venue> venues;
 
     public ArrayList<Venue> getVenues() {

@@ -404,7 +404,6 @@ public class SearchVenuesService extends BaseSpiceManagerService implements
             }
 
             File cacheFile = new File(getCacheDir(), "bitmapCache");
-            EventManager.trackAndLogEvent(TAG, primaryCategoryPNGIconUrl);
             BitmapRequest bitmapRequest = new BitmapRequest(primaryCategoryPNGIconUrl, cacheFile);
             RequestListener<Bitmap> requestListener = new ImageRequestListener(venue);
             getSpiceManager().execute(bitmapRequest, requestListener);

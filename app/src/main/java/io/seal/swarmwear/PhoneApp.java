@@ -6,11 +6,13 @@ import com.crittercism.app.Crittercism;
 import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import fr.nicolaspomepuy.androidwearcrashreport.mobile.CrashInfo;
+import fr.nicolaspomepuy.androidwearcrashreport.mobile.CrashReport;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhoneApp extends Application {
+public class PhoneApp extends Application implements CrashReport.IOnCrashListener {
 
     private static PhoneApp sInstance;
     private final Map<TrackerName, Tracker> mTrackers = new HashMap<>();
@@ -27,6 +29,7 @@ public class PhoneApp extends Application {
 
         if (!BuildConfig.DEBUG && !TextUtils.isEmpty(BuildConfig.CRITTERCISM_APP_ID)) {
             Crittercism.initialize(getApplicationContext(), BuildConfig.CRITTERCISM_APP_ID);
+            CrashReport.getInstance(this).setOnCrashListener(this);
         }
     }
 
@@ -61,6 +64,12 @@ public class PhoneApp extends Application {
         }
 
         return mTrackers.get(trackerId);
+    }
+
+    @Override
+    public void onCrashReceived(CrashInfo crashInfo) {
+        Crittercism.logHandledException(crashInfo.getThrowable());
+        CrashReport.getInstance(this).reportToPlayStore(this);
     }
 
     /**
