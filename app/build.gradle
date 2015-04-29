@@ -107,5 +107,6 @@ dependencies {
     compile 'com.foursquare:foursquare-android-nativeoauth-lib:1.0.0'
     compile 'fr.nicolaspomepuy.androidwearcrashreport:crashreport-mobile:0.4@aar'
     compile project(":shared")
-    wearApp project(':wearable')
+    debugWearApp project(path:':wearable', configuration: 'debug')
+    releaseWearApp project(path:':wearable', configuration: 'release')
 }
