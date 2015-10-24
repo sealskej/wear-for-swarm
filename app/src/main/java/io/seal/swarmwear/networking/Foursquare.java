@@ -20,7 +20,7 @@ public class Foursquare {
     public static final String UNIVERSAL_HOST = String.format("foursquare.com/oauth2/authenticate" +
             "?client_id=%s&response_type=token"
             + "&redirect_uri=null", BuildConfig.FOURSQUARE_CLIENT_ID);
-    public static String AUTH_URL = String.format("https://" + UNIVERSAL_HOST);
+    public static String AUTH_URL = "https://" + UNIVERSAL_HOST;
     public static int VERSION = 20140610;
     public static String INTENT_CHECKIN = "checkin";
 
@@ -40,7 +40,7 @@ public class Foursquare {
         return !TextUtils.isEmpty(getAccessToken(context.getApplicationContext()));
     }
 
-    public static interface Api {
+    public interface Api {
 
         @GET("/v2/venues/search")
         SearchResponse search(@Query("client_id") String clientId,
