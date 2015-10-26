@@ -110,7 +110,7 @@ public class ListNearbyVenuesFragment extends BaseListFragment
         super.onResume();
         EventManager.trackScreenView(TAG);
         BusProvider.getInstance().register(this);
-        SearchVenuesService.start(getActivity(), false);
+        SearchVenuesService.start(getActivity());
     }
 
     @Override
@@ -171,7 +171,7 @@ public class ListNearbyVenuesFragment extends BaseListFragment
         int itemId = item.getItemId();
         if (itemId == R.id.refresh) {
             setListShown(false);
-            SearchVenuesService.start(getActivity(), false);
+            SearchVenuesService.start(getActivity());
             return true;
         }
 
@@ -205,7 +205,7 @@ public class ListNearbyVenuesFragment extends BaseListFragment
 
     private void searchVenuesIfLoggedIn() {
         if (Foursquare.isLoggedIn(getActivity())) {
-            SearchVenuesService.start(getActivity(), false);
+            SearchVenuesService.start(getActivity());
         }
     }
 

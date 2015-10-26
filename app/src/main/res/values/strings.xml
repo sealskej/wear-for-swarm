@@ -30,5 +30,6 @@
     <string name="facebook_share_summary">Facebook must be enabled in third party connections.</string>
     <string name="twitter_share_title">Twitter</string>
     <string name="twitter_share_summary">Twitter must be enabled in third party connections.</string>
+    <string name="share_checkins">Share checkins on other networks</string>
 
 </resources>

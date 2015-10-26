@@ -14,20 +14,17 @@ public class Properties {
 
     public static class SharePreferencesKeys {
         public static final String FOURSQUARE_ACCESS_TOKEN = "foursquare_access_token";
-        public static final String LOCATION_CHANGED_TIME = "location_changed_time";
     }
 
     public static class Keys {
-        public static final String PASSIVE = "passive";
-        public static final String UPDATE_LOCATION_REQUEST = "update_location_request";
         public static final String VENUE_ID = "venue_id";
         public static final String VENUE_NAMES_ARRAY = "venue_name_array";
         public static final String VENUE_ADDRESS_ARRAY = "venue_address_array";
         public static final String VENUE_ID_ARRAY = "venue_id_array";
         public static final String GOOGLE_PLAY_CONNECTION_RESULT = "google_play_connection_result";
-        public static final String SEND_TO_WEARABLE = "send_to_wearable";
     }
 
+    @SuppressWarnings("unused")
     public static class PreferenceKeys {
         public static final String AUTOMATIC_NOTIFICATIONS = "automatic_notifications";
         public static final String SUMMARY_NOTIFICATION = "summary_notification";

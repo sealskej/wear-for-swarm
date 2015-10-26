@@ -27,7 +27,7 @@ public class WearListenerService extends TeleportService {
             if (path.startsWith(Properties.Path.SEARCH_VENUES)) {
 
                 if (Foursquare.isLoggedIn(WearListenerService.this)) {
-                    SearchVenuesService.start(WearListenerService.this, false, true, true);
+                    SearchVenuesService.start(WearListenerService.this);
                 } else {
                     sendMessage(Properties.Path.NO_LOGIN, null);
                 }

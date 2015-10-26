@@ -76,12 +76,7 @@ public class DoCheckinService extends BaseSpiceRequestService<DoCheckinResponse>
                 .setSmallIcon(R.drawable.ic_stat_bee)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_large))
                 .setContentIntent(PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT))
-                .setAutoCancel(true)
-                .extend(
-                        new NotificationCompat
-                                .WearableExtender()
-                                .addAction(Utils.getSearchAction(this, 0))
-                );
+                .setAutoCancel(true);
 
 
         getNotificationManager().notify(((Long) System.currentTimeMillis()).hashCode(), notificationBuilder.build());
