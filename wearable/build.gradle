@@ -37,6 +37,8 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    publishNonDefault true
 }
 
 if (project.hasProperty('signingStoreLocation')) {
